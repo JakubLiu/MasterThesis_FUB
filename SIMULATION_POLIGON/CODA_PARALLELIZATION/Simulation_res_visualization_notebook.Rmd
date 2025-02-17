@@ -1,0 +1,276 @@
+---
+title: "Simulation results visualization notebook"
+author: "Jakub Liu"
+date: "2025-02-17"
+output: pdf_document
+---
+
+Offcourse these are non-exhaustive visualizations.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(ggpubr)
+```
+
+# Simulation 1
+```{r}
+sim1 <- fread("C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/SIMULATION_POLIGON/Simulation_1_parallel_table.csv")
+```
+
+## Stratify by the covariance structure
+```{r}
+sim1_Unst <- sim1[sim1$covariance_structures == 'Unstructured']
+sim1_AR1 <- sim1[sim1$covariance_structures == 'AR(1)']
+sim1_AR2 <- sim1[sim1$covariance_structures == 'AR(2)']
+sim1_Toe <- sim1[sim1$covariance_structures == 'Toeplitz']
+```
+
+### Unstructured covariance matrix
+#### Plot the power across the sample sizes for each effect size
+
+
+```{r}
+
+
+plot1 <- ggplot(sim1_Unst[sim1_Unst$effect_sizes == 1,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 1") +
+  theme_minimal()
+
+plot2 <- ggplot(sim1_Unst[sim1_Unst$effect_sizes == 2,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 2") +
+  theme_minimal()
+
+plot3 <- ggplot(sim1_Unst[sim1_Unst$effect_sizes == 3,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 3") +
+  theme_minimal()
+
+
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Global test, Unstructured covmat", 
+                                color = "black", face = "bold", size = 14))
+
+
+
+
+
+plot1 <- ggplot(sim1_Unst[sim1_Unst$effect_sizes == 1,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 1") +
+  theme_minimal()
+
+plot2 <- ggplot(sim1_Unst[sim1_Unst$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 2") +
+  theme_minimal()
+
+plot3 <- ggplot(sim1_Unst[sim1_Unst$effect_sizes == 3,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 3") +
+  theme_minimal()
+
+
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Maximum test, Unstructured covmat", 
+                                color = "black", face = "bold", size = 14))
+
+```
+### AR(1) covariance matrix
+#### Plot the power across the sample sizes for each effect size
+
+```{r}
+
+
+plot1 <- ggplot(sim1_AR1[sim1_AR1$effect_sizes == 1,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 1") +
+  theme_minimal()
+
+plot2 <- ggplot(sim1_AR1[sim1_AR1$effect_sizes == 2,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 2") +
+  theme_minimal()
+
+plot3 <- ggplot(sim1_AR1[sim1_AR1$effect_sizes == 3,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 3") +
+  theme_minimal()
+
+
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Global test, AR(1) covmat", 
+                                color = "black", face = "bold", size = 14))
+
+
+
+
+
+plot1 <- ggplot(sim1_AR1[sim1_AR1$effect_sizes == 1,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 1") +
+  theme_minimal()
+
+plot2 <- ggplot(sim1_AR1[sim1_AR1$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 2") +
+  theme_minimal()
+
+plot3 <- ggplot(sim1_AR1[sim1_AR1$effect_sizes == 3,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 3") +
+  theme_minimal()
+
+
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Maximum test, AR(1) covmat", 
+                                color = "black", face = "bold", size = 14))
+
+```
+### AR(2) covariance matrix
+#### Plot the power across the sample sizes for each effect size
+
+```{r}
+
+
+plot1 <- ggplot(sim1_AR2[sim1_AR2$effect_sizes == 1,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 1") +
+  theme_minimal()
+
+plot2 <- ggplot(sim1_AR2[sim1_AR2$effect_sizes == 2,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 2") +
+  theme_minimal()
+
+plot3 <- ggplot(sim1_AR2[sim1_AR2$effect_sizes == 3,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 3") +
+  theme_minimal()
+
+
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Global test, AR(2) covmat", 
+                                color = "black", face = "bold", size = 14))
+
+
+
+
+
+plot1 <- ggplot(sim1_AR2[sim1_AR2$effect_sizes == 1,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 1") +
+  theme_minimal()
+
+plot2 <- ggplot(sim1_AR2[sim1_AR2$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 2") +
+  theme_minimal()
+
+plot3 <- ggplot(sim1_AR2[sim1_AR2$effect_sizes == 3,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 3") +
+  theme_minimal()
+
+
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Maximum test, AR(2) covmat", 
+                                color = "black", face = "bold", size = 14))
+```
+### Toeplitz covariance matrix
+#### Plot the power across the sample sizes for each effect size
+
+```{r}
+
+
+plot1 <- ggplot(sim1_Toe[sim1_Toe$effect_sizes == 1,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 1") +
+  theme_minimal()
+
+plot2 <- ggplot(sim1_Toe[sim1_Toe$effect_sizes == 2,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 2") +
+  theme_minimal()
+
+plot3 <- ggplot(sim1_Toe[sim1_Toe$effect_sizes == 3,], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the effect size of 3") +
+  theme_minimal()
+
+
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Global test, Toeplitz covmat", 
+                                color = "black", face = "bold", size = 14))
+
+
+
+
+
+plot1 <- ggplot(sim1_Toe[sim1_Toe$effect_sizes == 1,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 1") +
+  theme_minimal()
+
+plot2 <- ggplot(sim1_Toe[sim1_Toe$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 2") +
+  theme_minimal()
+
+plot3 <- ggplot(sim1_Toe[sim1_Toe$effect_sizes == 3,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the effect size of 3") +
+  theme_minimal()
+
+
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Maximum test, Toeplitz covmat", 
+                                color = "black", face = "bold", size = 14))
+```
+
