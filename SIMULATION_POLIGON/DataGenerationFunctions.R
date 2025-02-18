@@ -159,6 +159,24 @@ GenerateData <- function(d,n,rho,sigma,CovStruct = 'Unstructured',mu0 = 0,mu0_lo
 
 
 
+#======================================================================================================================
+
+# this function returns a dataframe whichs column means are defined by the grp_means vector
+# parameters:
+#         grp_means --> vector of group means
+#         n --> sample size
+#         var --> variance
+gen_data_given_grp_means <- function(grp_means,n,var){
+  d <- length(grp_means)
+  data <- matrix(0, nrow = n, ncol = d)
+  
+  for(i in 1:d){
+    data[,i] <- rnorm(n,grp_means[i],var)
+  }
+  
+  return(data.frame(data))
+}
+
 # ----------------------------------- TESTING -----------------------------------------
 
 # 
