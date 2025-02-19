@@ -1,5 +1,5 @@
 ---
-title: "Simulation results visualization notebook"
+title: "Simulation 1 results visualization notebook"
 author: "Jakub Liu"
 date: "2025-02-17"
 output: pdf_document
@@ -8,7 +8,7 @@ output: pdf_document
 Offcourse these are non-exhaustive visualizations.
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
 ```
 
 ```{r}
@@ -20,6 +20,7 @@ library(ggpubr)
 # Simulation 1
 ```{r}
 sim1 <- fread("C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/SIMULATION_POLIGON/Simulation_1_parallel_table.csv")
+head(sim1)
 ```
 
 ## Stratify by the covariance structure
