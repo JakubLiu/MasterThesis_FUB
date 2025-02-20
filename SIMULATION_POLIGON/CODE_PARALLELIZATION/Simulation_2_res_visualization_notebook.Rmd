@@ -1,0 +1,87 @@
+---
+title: "Simulation_2_res_visualization_notebook"
+author: "Jakub Liu"
+date: "2025-02-20"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
+```
+
+
+# Clarification for the alternative patterns
+
+## Linear
+$y = 2x + 5$
+
+## Convex
+$y = 2x^2 + 2x + 5$
+
+## Concave
+$y = (-2)x^2 + 2x + 5$
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+sim2 <- fread("C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/SIMULATION_POLIGON/Simulation_2_parallel_table.csv")
+head(sim2)
+```
+
+
+# Plot the power across the sample sizes for each alternative pattern
+## Global test
+```{r}
+plot1 <- ggplot(sim2[sim2$alternative_patterns == 'linear',], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the linear pattern") +
+  theme_minimal()
+
+plot2 <- ggplot(sim2[sim2$alternative_patterns == 'convex',], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the convex pattern") +
+  theme_minimal()
+
+plot3 <- ggplot(sim2[sim2$alternative_patterns == 'concave',], aes(x = sample_sizes, y = power_global)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the concave pattern") +
+  theme_minimal()
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Global test", 
+                                color = "black", face = "bold", size = 14))
+```
+## Maximum test
+```{r}
+plot1 <- ggplot(sim2[sim2$alternative_patterns == 'linear',], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the linear pattern") +
+  theme_minimal()
+
+plot2 <- ggplot(sim2[sim2$alternative_patterns == 'convex',], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the convex pattern") +
+  theme_minimal()
+
+plot3 <- ggplot(sim2[sim2$alternative_patterns == 'concave',], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "green") + 
+  geom_line(color = "green", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the concave pattern") +
+  theme_minimal()
+
+combined_plot <- ggarrange(plot1, plot2, plot3, ncol = 1, nrow = 3)
+annotate_figure(combined_plot,
+                top = text_grob("Maximum test", 
+                                color = "black", face = "bold", size = 14))
+```
+
