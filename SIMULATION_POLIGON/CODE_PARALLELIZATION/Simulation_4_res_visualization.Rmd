@@ -1,0 +1,112 @@
+---
+title: "Simulation 4 results visualization"
+author: "Jakub Liu"
+date: "2025-02-24"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
+```
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+sim4 <- fread("C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/SIMULATION_POLIGON/Simulation_4_parallel_table.csv")
+```
+
+# Stratify by covariance structure
+```{r}
+unst <- sim4[sim4$covariance_structures == 'Unstructured',]
+AR1 <- sim4[sim4$covariance_structures == 'AR(1)',]
+AR2 <- sim4[sim4$covariance_structures == 'AR(2)',]
+toe <- sim4[sim4$covariance_structures == 'Toeplitz',]
+```
+
+# Plot the power for both tests and all covariance structures across the dimensionalities
+```{r}
+# Unstructured covariance matrix
+
+plot1 <- ggplot(unst, aes(x = dimensions, y = power_global)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the unstructured covariance matrix.") +
+  theme_minimal()
+
+plot2 <- ggplot(unst, aes(x = dimensions, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the unstructured covariance matrix.") +
+  theme_minimal()
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Unstructured covariance matrix", 
+                                color = "black", face = "bold", size = 14))
+```
+
+```{r}
+# AR(1) covariance matrix
+
+plot1 <- ggplot(AR1, aes(x = dimensions, y = power_global)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the AR(1) covariance matrix.") +
+  theme_minimal()
+
+plot2 <- ggplot(AR1, aes(x = dimensions, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the AR(1) covariance matrix.") +
+  theme_minimal()
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("AR(1) covariance matrix", 
+                                color = "black", face = "bold", size = 14))
+```
+```{r}
+# AR(2) covariance matrix
+
+plot1 <- ggplot(AR2, aes(x = dimensions, y = power_global)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the AR(2) covariance matrix.") +
+  theme_minimal()
+
+plot2 <- ggplot(AR2, aes(x = dimensions, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the AR(2) covariance matrix.") +
+  theme_minimal()
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("AR(2) covariance matrix", 
+                                color = "black", face = "bold", size = 14))
+```
+```{r}
+# Toeplitz covariance matrix
+
+plot1 <- ggplot(toe, aes(x = dimensions, y = power_global)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the global test across sample sizes for the Toeplitz covariance matrix.") +
+  theme_minimal()
+
+plot2 <- ggplot(toe, aes(x = dimensions, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across sample sizes for the Toeplitz covariance matrix.") +
+  theme_minimal()
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Toeplitz covariance matrix", 
+                                color = "black", face = "bold", size = 14))
+```
+
