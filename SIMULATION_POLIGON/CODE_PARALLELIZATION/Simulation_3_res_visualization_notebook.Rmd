@@ -1,0 +1,68 @@
+---
+title: "Simulation_3_res_visualization"
+author: "Jakub Liu"
+date: "2025-03-05"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
+```
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+sim3 <- fread("C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/SIMULATION_POLIGON/Sim3_full_parallel_output_table.csv")
+head(sim3)
+```
+
+# Stratify by covariance structure
+```{r}
+Unst <- sim3[sim3$covariance_structures == 'Unstructured',]
+AR1 <- sim3[sim3$covariance_structures == 'AR(1)']
+AR2 <- sim3[sim3$covariance_structures == 'AR(2)']
+Toe <- sim3[sim3$covariance_structures == 'Toeplitz']
+```
+
+# Impact of the number of iterations (maxtest) on the power (of the maximum test)
+
+Here I set the following variables to the following constant values.\newline
+- sample size --> 10
+- effect size --> 2
+
+```{r}
+plot1 <- ggplot(Unst[Unst$sample_sizes == 10 & Unst$effect_sizes == 2,], aes(x = n_iters_maxtest, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of iterations (Unstructured covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot2 <- ggplot(AR1[AR1$sample_sizes == 10 & AR1$effect_sizes == 2,], aes(x = n_iters_maxtest, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of iterations (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot3 <- ggplot(AR2[AR2$sample_sizes == 10 & AR2$effect_sizes == 2,], aes(x = n_iters_maxtest, y = power_max)) +
+  geom_point(color = "orange") + 
+  geom_line(color = "orange", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of iterations (AR(2) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot4 <- ggplot(Toe[Toe$sample_sizes == 10 & Toe$effect_sizes == 2,], aes(x = n_iters_maxtest, y = power_max)) +
+  geom_point(color = "magenta") + 
+  geom_line(color = "magenta", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of iterations (Toeplitz covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+combined_plot <- ggarrange(plot1, plot2, plot3, plot4, ncol = 2, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across its number of iterations", 
+                                color = "black", face = "bold", size = 14))
+```
+
+
