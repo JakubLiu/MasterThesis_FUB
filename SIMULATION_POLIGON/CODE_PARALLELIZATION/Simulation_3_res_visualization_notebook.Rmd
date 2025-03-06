@@ -64,5 +64,93 @@ annotate_figure(combined_plot,
                 top = text_grob("Power of the maximum test across its number of iterations", 
                                 color = "black", face = "bold", size = 14))
 ```
+# Impact of the sample size for the lowest and highest number of iterations
 
+```{r}
+min_iter <- sort(unique(sim3$n_iters_maxtest))[1]
+max_iter <- sort(unique(sim3$n_iters_maxtest))[length(unique(sim3$n_iters_maxtest))]
+```
+
+## Unstructured covariance matrix
+```{r}
+plot1 <- ggplot(Unst[Unst$n_iters_maxtest == min_iter,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 1000") +
+  theme(plot.title = element_text(size = 7))
+
+plot2 <- ggplot(Unst[Unst$n_iters_maxtest == max_iter,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 20000") +
+  theme(plot.title = element_text(size = 7))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the sample sizes for the minimum and maximum iteration number\n
+                                (Unstructured covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+## AR(1) covariance matrix
+```{r}
+plot1 <- ggplot(AR1[AR1$n_iters_maxtest == min_iter,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 1000") +
+  theme(plot.title = element_text(size = 7))
+
+plot2 <- ggplot(AR1[AR1$n_iters_maxtest == max_iter,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 20000") +
+  theme(plot.title = element_text(size = 7))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the sample sizes for the minimum and maximum iteration number\n
+                                (AR(1) covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+
+## AR(2) covariance matrix
+```{r}
+plot1 <- ggplot(AR2[AR2$n_iters_maxtest == min_iter,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 1000") +
+  theme(plot.title = element_text(size = 7))
+
+plot2 <- ggplot(AR2[AR2$n_iters_maxtest == max_iter,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 20000") +
+  theme(plot.title = element_text(size = 7))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the sample sizes for the minimum and maximum iteration number\n
+                                (AR(2) covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+
+## Toeplitz covariance matrix
+```{r}
+plot1 <- ggplot(Toe[Toe$n_iters_maxtest == min_iter,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 1000") +
+  theme(plot.title = element_text(size = 7))
+
+plot2 <- ggplot(Toe[Toe$n_iters_maxtest == max_iter,], aes(x = sample_sizes, y = power_max)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 20000") +
+  theme(plot.title = element_text(size = 7))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the sample sizes for the minimum and maximum iteration number\n
+                                (Toeplitz covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
 
