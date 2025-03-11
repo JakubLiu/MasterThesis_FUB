@@ -1,0 +1,105 @@
+---
+title: "Sim_5_res_visualization_notebook"
+author: "Jakub Liu"
+date: "2025-03-08"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
+```
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+sim5 <- fread("C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/SIMULATION_POLIGON/Sim5_full_parallel_output_table.csv")
+
+# the data needs to be reordered (wrong order of variables previously defined in expand.grid())
+sim5_reordered <- sim5[order(rank(sim5$covariance_structures),
+                    rank(sim5$sample_sizes),
+                    rank(sim5$dimensions),
+                    rank(sim5$variance),
+                    rank(sim5$correlation_abs)),]
+
+
+
+# remove these conditions for which the covariance matrix is non-invertible
+sim5_clean <- sim5_reordered[sim5_reordered$power_global != 'Covariance matrix non-invertible' & sim5_reordered$power_max != 'Covariance matrix non-invertible', ]
+head(sim5_clean)
+```
+
+
+# Stratify by covariance structure
+```{r}
+Unst <- sim5_clean[sim5_clean$covariance_structures == 'Unstructured', ]
+AR1 <- sim5_clean[sim5_clean$covariance_structures == 'AR(1)', ]
+AR2 <- sim5_clean[sim5_clean$covariance_structures == 'AR(2)', ]
+Toe <- sim5_clean[sim5_clean$covariance_structures == 'Topelitz', ]
+```
+
+# Power by correlation
+Here I fix the constants to the following values:
+- sample size = 5
+- dimensions = 5
+- variance = 5
+
+## Unstructured covariance matrix
+```{r}
+plot1 <- ggplot(Unst[
+  Unst$sample_sizes == 5 &
+  Unst$dimensions == 5 &
+  Unst$variance == 5,
+], aes(x = correlation_abs, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the correlation value (Unstructured covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot2 <- ggplot(Unst[
+  Unst$sample_sizes == 5 &
+  Unst$dimensions == 5 &
+  Unst$variance == 5,
+  ], aes(x = correlation_abs, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across the correlation value (Unstructured covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the corelation\n
+                                (Unstructured covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+```{r}
+plot1 <- ggplot(AR1[
+  AR1$sample_sizes == 5 &
+  AR1$dimensions == 5 &
+  AR1$variance == 5,
+], aes(x = correlation_abs, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot2 <- ggplot(AR1[
+  AR1$sample_sizes == 5 &
+  AR1$dimensions == 5 &
+  AR1$variance == 5,
+  ], aes(x = correlation_abs, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the corelation\n
+                                (AR(1) covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+

@@ -17,7 +17,15 @@ library(ggpubr)
 
 ```{r}
 sim3 <- fread("C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/SIMULATION_POLIGON/Sim3_full_parallel_output_table.csv")
-head(sim3)
+View(sim3)
+
+# the data needs to be reordered (wrong order of variables previously defined in expand.grid())
+sim3_reordered <- sim3[order(rank(sim3$covariance_structures),
+                    rank(sim3$sample_sizes),
+                    rank(sim3$effect_sizes),
+                    rank(sim3$n_iters_maxtest)) ,]
+
+View(sim3_reordered)
 ```
 
 # Stratify by covariance structure

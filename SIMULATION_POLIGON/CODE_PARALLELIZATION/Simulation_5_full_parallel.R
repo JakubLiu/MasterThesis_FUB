@@ -4,7 +4,7 @@ library(foreach)
 library(doParallel)
 
 # make cluster for parallel computing
-num_cores <- 60  # we will use 60 cores, specify at least num_cores in the slurm script
+num_cores <- 10  # we will use 60 cores, specify at least num_cores in the slurm script
 cl <- makeCluster(num_cores)
 registerDoParallel(cl)
 
@@ -60,8 +60,10 @@ colnames(simulation_1_table) <- c('covariance_structures','sample_sizes', 'dimen
 
 # grid of all possible varianle combinarions
 param_grid <- expand.grid(covariance_structures, sample_sizes, dimensions, variance, correlation_abs)
+param_grid <- expand.grid(correlation_abs, variance, dimensions, sample_sizes, covariance_structures)
 colnames(param_grid) <- c('covariance_structures', 'sample_sizes', 'dimensions', 'variance', 'correlation_abs')
 
+View(param_grid)
 
 # Simulations
 simulation_1_table <- foreach(rownum = 1:nrow(param_grid), .combine = rbind, .packages = c("MASS", "matrixcalc", "foreach", "doParallel")) %dopar% {
