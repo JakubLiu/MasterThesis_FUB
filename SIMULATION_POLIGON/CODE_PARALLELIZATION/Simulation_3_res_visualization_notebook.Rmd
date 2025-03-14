@@ -26,6 +26,7 @@ sim3_reordered <- sim3[order(rank(sim3$covariance_structures),
                     rank(sim3$n_iters_maxtest)) ,]
 
 View(sim3_reordered)
+
 ```
 
 # Stratify by covariance structure
@@ -80,14 +81,17 @@ max_iter <- sort(unique(sim3$n_iters_maxtest))[length(unique(sim3$n_iters_maxtes
 ```
 
 ## Unstructured covariance matrix
+
+Here I set the following variables to the following constant values.\newline
+- effect size --> 2
 ```{r}
-plot1 <- ggplot(Unst[Unst$n_iters_maxtest == min_iter,], aes(x = sample_sizes, y = power_max)) +
+plot1 <- ggplot(Unst[Unst$n_iters_maxtest == min_iter & Unst$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
   geom_point(color = "blue") + 
   geom_line(color = "blue", linetype = "dashed") +
   ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 1000") +
   theme(plot.title = element_text(size = 7))
 
-plot2 <- ggplot(Unst[Unst$n_iters_maxtest == max_iter,], aes(x = sample_sizes, y = power_max)) +
+plot2 <- ggplot(Unst[Unst$n_iters_maxtest == max_iter & Unst$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
   geom_point(color = "red") + 
   geom_line(color = "red", linetype = "dashed") +
   ggtitle("Power of the maximum test across the number of sample sizes for an iteration number of 20000") +
@@ -101,13 +105,13 @@ annotate_figure(combined_plot,
 ```
 ## AR(1) covariance matrix
 ```{r}
-plot1 <- ggplot(AR1[AR1$n_iters_maxtest == min_iter,], aes(x = sample_sizes, y = power_max)) +
+plot1 <- ggplot(AR1[AR1$n_iters_maxtest == min_iter & AR1$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
   geom_point(color = "blue") + 
   geom_line(color = "blue", linetype = "dashed") +
   ggtitle("Power of the maximum test across the sample sizes for an iteration number of 1000") +
   theme(plot.title = element_text(size = 7))
 
-plot2 <- ggplot(AR1[AR1$n_iters_maxtest == max_iter,], aes(x = sample_sizes, y = power_max)) +
+plot2 <- ggplot(AR1[AR1$n_iters_maxtest == max_iter & AR1$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
   geom_point(color = "red") + 
   geom_line(color = "red", linetype = "dashed") +
   ggtitle("Power of the maximum test across the sample sizes for an iteration number of 20000") +
@@ -122,13 +126,13 @@ annotate_figure(combined_plot,
 
 ## AR(2) covariance matrix
 ```{r}
-plot1 <- ggplot(AR2[AR2$n_iters_maxtest == min_iter,], aes(x = sample_sizes, y = power_max)) +
+plot1 <- ggplot(AR2[AR2$n_iters_maxtest == min_iter & AR2$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
   geom_point(color = "blue") + 
   geom_line(color = "blue", linetype = "dashed") +
   ggtitle("Power of the maximum test across the sample sizes for an iteration number of 1000") +
   theme(plot.title = element_text(size = 7))
 
-plot2 <- ggplot(AR2[AR2$n_iters_maxtest == max_iter,], aes(x = sample_sizes, y = power_max)) +
+plot2 <- ggplot(AR2[AR2$n_iters_maxtest == max_iter & AR2$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
   geom_point(color = "red") + 
   geom_line(color = "red", linetype = "dashed") +
   ggtitle("Power of the maximum test across the sample sizes for an iteration number of 20000") +
@@ -143,13 +147,13 @@ annotate_figure(combined_plot,
 
 ## Toeplitz covariance matrix
 ```{r}
-plot1 <- ggplot(Toe[Toe$n_iters_maxtest == min_iter,], aes(x = sample_sizes, y = power_max)) +
+plot1 <- ggplot(Toe[Toe$n_iters_maxtest == min_iter & Toe$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
   geom_point(color = "blue") + 
   geom_line(color = "blue", linetype = "dashed") +
   ggtitle("Power of the maximum test across the sample sizes for an iteration number of 1000") +
   theme(plot.title = element_text(size = 7))
 
-plot2 <- ggplot(Toe[Toe$n_iters_maxtest == max_iter,], aes(x = sample_sizes, y = power_max)) +
+plot2 <- ggplot(Toe[Toe$n_iters_maxtest == max_iter & Toe$effect_sizes == 2,], aes(x = sample_sizes, y = power_max)) +
   geom_point(color = "red") + 
   geom_line(color = "red", linetype = "dashed") +
   ggtitle("Power of the maximum test across the sample sizes for an iteration number of 20000") +
@@ -166,16 +170,18 @@ annotate_figure(combined_plot,
 
 # Impact of the effect size for the lowest and highest number of iterations
 
+Here I set the following variables to the following constant values.\newline
+- sample size --> 10
 
 ## Unstructured covariance matrix
 ```{r}
-plot1 <- ggplot(Unst[Unst$n_iters_maxtest == min_iter,], aes(x = effect_sizes, y = power_max)) +
+plot1 <- ggplot(Unst[Unst$n_iters_maxtest == min_iter & Unst$sample_sizes == 10,], aes(x = effect_sizes, y = power_max)) +
   geom_point(color = "blue") + 
   geom_line(color = "blue", linetype = "dashed") +
   ggtitle("Power of the maximum test across the effect sizes for an iteration number of 1000") +
   theme(plot.title = element_text(size = 7))
 
-plot2 <- ggplot(Unst[Unst$n_iters_maxtest == max_iter,], aes(x = effect_sizes, y = power_max)) +
+plot2 <- ggplot(Unst[Unst$n_iters_maxtest == max_iter & Unst$sample_sizes == 10,], aes(x = effect_sizes, y = power_max)) +
   geom_point(color = "red") + 
   geom_line(color = "red", linetype = "dashed") +
   ggtitle("Power of the maximum test across the effect sizes for an iteration number of 20000") +
@@ -190,13 +196,13 @@ annotate_figure(combined_plot,
 
 ## AR(1) covariance matrix
 ```{r}
-plot1 <- ggplot(AR1[AR1$n_iters_maxtest == min_iter,], aes(x = effect_sizes, y = power_max)) +
+plot1 <- ggplot(AR1[AR1$n_iters_maxtest == min_iter & AR1$sample_sizes == 10,], aes(x = effect_sizes, y = power_max)) +
   geom_point(color = "blue") + 
   geom_line(color = "blue", linetype = "dashed") +
   ggtitle("Power of the maximum test across the effect sizes for an iteration number of 1000") +
   theme(plot.title = element_text(size = 7))
 
-plot2 <- ggplot(AR1[AR1$n_iters_maxtest == max_iter,], aes(x = effect_sizes, y = power_max)) +
+plot2 <- ggplot(AR1[AR1$n_iters_maxtest == max_iter & AR1$sample_sizes == 10,], aes(x = effect_sizes, y = power_max)) +
   geom_point(color = "red") + 
   geom_line(color = "red", linetype = "dashed") +
   ggtitle("Power of the maximum test across the effect sizes for an iteration number of 20000") +
@@ -212,13 +218,13 @@ annotate_figure(combined_plot,
 
 ## AR(2) covariance matrix
 ```{r}
-plot1 <- ggplot(AR2[AR2$n_iters_maxtest == min_iter,], aes(x = effect_sizes, y = power_max)) +
+plot1 <- ggplot(AR2[AR2$n_iters_maxtest == min_iter & AR2$sample_sizes == 10,], aes(x = effect_sizes, y = power_max)) +
   geom_point(color = "blue") + 
   geom_line(color = "blue", linetype = "dashed") +
   ggtitle("Power of the maximum test across the effect sizes for an iteration number of 1000") +
   theme(plot.title = element_text(size = 7))
 
-plot2 <- ggplot(AR2[AR2$n_iters_maxtest == max_iter,], aes(x = effect_sizes, y = power_max)) +
+plot2 <- ggplot(AR2[AR2$n_iters_maxtest == max_iter & AR2$sample_sizes == 10,], aes(x = effect_sizes, y = power_max)) +
   geom_point(color = "red") + 
   geom_line(color = "red", linetype = "dashed") +
   ggtitle("Power of the maximum test across the effect sizes for an iteration number of 20000") +
@@ -234,13 +240,13 @@ annotate_figure(combined_plot,
 
 ## Toeplitz covariance matrix
 ```{r}
-plot1 <- ggplot(Toe[Toe$n_iters_maxtest == min_iter,], aes(x = effect_sizes, y = power_max)) +
+plot1 <- ggplot(Toe[Toe$n_iters_maxtest == min_iter & Toe$sample_sizes == 10,], aes(x = effect_sizes, y = power_max)) +
   geom_point(color = "blue") + 
   geom_line(color = "blue", linetype = "dashed") +
   ggtitle("Power of the maximum test across the effect sizes for an iteration number of 1000") +
   theme(plot.title = element_text(size = 7))
 
-plot2 <- ggplot(Toe[Toe$n_iters_maxtest == max_iter,], aes(x = effect_sizes, y = power_max)) +
+plot2 <- ggplot(Toe[Toe$n_iters_maxtest == max_iter & Toe$sample_sizes == 10,], aes(x = effect_sizes, y = power_max)) +
   geom_point(color = "red") + 
   geom_line(color = "red", linetype = "dashed") +
   ggtitle("Power of the maximum test across the effect sizes for an iteration number of 20000") +
