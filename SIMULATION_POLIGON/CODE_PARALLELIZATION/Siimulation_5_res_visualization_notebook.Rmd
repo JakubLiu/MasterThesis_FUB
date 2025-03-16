@@ -38,7 +38,7 @@ head(sim5_clean)
 Unst <- sim5_clean[sim5_clean$covariance_structures == 'Unstructured', ]
 AR1 <- sim5_clean[sim5_clean$covariance_structures == 'AR(1)', ]
 AR2 <- sim5_clean[sim5_clean$covariance_structures == 'AR(2)', ]
-Toe <- sim5_clean[sim5_clean$covariance_structures == 'Topelitz', ]
+Toe <- sim5_clean[sim5_clean$covariance_structures == 'Toeplitz', ]
 ```
 
 # Power by correlation
@@ -46,6 +46,8 @@ Here I fix the constants to the following values:
 - sample size = 5
 - dimensions = 5
 - variance = 5
+
+Here the plots are weird, but you can see where the power goes.
 
 ## Unstructured covariance matrix
 ```{r}
@@ -75,6 +77,9 @@ annotate_figure(combined_plot,
                                 (Unstructured covariance matrix)", 
                                 color = "black", face = "bold", size = 10))
 ```
+
+
+# AR(1) covariance matrix
 ```{r}
 plot1 <- ggplot(AR1[
   AR1$sample_sizes == 5 &
@@ -103,3 +108,184 @@ annotate_figure(combined_plot,
                                 color = "black", face = "bold", size = 10))
 ```
 
+# AR(2) covariance matrix
+```{r}
+plot1 <- ggplot(AR2[
+  AR2$sample_sizes == 5 &
+  AR2$dimensions == 5 &
+  AR2$variance == 5,
+], aes(x = correlation_abs, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot2 <- ggplot(AR2[
+  AR2$sample_sizes == 5 &
+  AR2$dimensions == 5 &
+  AR2$variance == 5,
+  ], aes(x = correlation_abs, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the corelation\n
+                                (AR(2) covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+```{r}
+View(Toe)
+```
+
+# Toeplitz covariance matrix
+```{r}
+plot1 <- ggplot(Toe[
+  Toe$sample_sizes == 5 &
+  Toe$dimensions == 5 &
+  Toe$variance == 5,
+], aes(x = correlation_abs, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot2 <- ggplot(Toe[
+  Toe$sample_sizes == 5 &
+  Toe$dimensions == 5 &
+  Toe$variance == 5,
+  ], aes(x = correlation_abs, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the corelation\n
+                                (AR(1) covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+
+# Power by correlation (now with a much greater sample size)
+Here I fix the constants to the following values:
+- sample size = 91
+- dimensions = 5
+- variance = 5
+
+## Unstructured covariance matrix
+```{r}
+plot1 <- ggplot(Unst[
+  Unst$sample_sizes == 91 &
+  Unst$dimensions == 5 &
+  Unst$variance == 5,
+], aes(x = correlation_abs, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the correlation value (Unstructured covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot2 <- ggplot(Unst[
+  Unst$sample_sizes == 91 &
+  Unst$dimensions == 5 &
+  Unst$variance == 5,
+  ], aes(x = correlation_abs, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across the correlation value (Unstructured covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the corelation\n
+                                (Unstructured covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+
+# AR(1) covariance matrix
+```{r}
+plot1 <- ggplot(AR1[
+  AR1$sample_sizes == 91 &
+  AR1$dimensions == 5 &
+  AR1$variance == 5,
+], aes(x = correlation_abs, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot2 <- ggplot(AR1[
+  AR1$sample_sizes == 91 &
+  AR1$dimensions == 5 &
+  AR1$variance == 5,
+  ], aes(x = correlation_abs, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the corelation\n
+                                (AR(1) covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+# AR(2) covariance matrix
+```{r}
+plot1 <- ggplot(AR2[
+  AR2$sample_sizes == 91 &
+  AR2$dimensions == 5 &
+  AR2$variance == 5,
+], aes(x = correlation_abs, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot2 <- ggplot(AR2[
+  AR2$sample_sizes == 91 &
+  AR2$dimensions == 5 &
+  AR2$variance == 5,
+  ], aes(x = correlation_abs, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the corelation\n
+                                (AR(2) covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
+
+# Toeplitz covariance matrix
+```{r}
+plot1 <- ggplot(Toe[
+  Toe$sample_sizes == 91 &
+  Toe$dimensions == 5 &
+  Toe$variance == 5,
+], aes(x = correlation_abs, y = power_max)) +
+  geom_point(color = "blue") + 
+  geom_line(color = "blue", linetype = "dashed") +
+  ggtitle("Power of the maximum test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+plot2 <- ggplot(Toe[
+  Toe$sample_sizes == 91 &
+  Toe$dimensions == 5 &
+  Toe$variance == 5,
+  ], aes(x = correlation_abs, y = power_global)) +
+  geom_point(color = "red") + 
+  geom_line(color = "red", linetype = "dashed") +
+  ggtitle("Power of the global test across the correlation value (AR(1) covariance matrix)") +
+  theme(plot.title = element_text(size = 5))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("Power of the maximum test across the corelation\n
+                                (AR(1) covariance matrix)", 
+                                color = "black", face = "bold", size = 10))
+```
