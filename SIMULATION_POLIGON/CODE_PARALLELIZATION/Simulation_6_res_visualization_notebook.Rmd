@@ -1,0 +1,60 @@
+---
+title: "Simulation 5 res visualization"
+author: "Jakub Liu"
+date: "2025-03-17"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
+```
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+sim6 <- fread("C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/SIMULATION_POLIGON/Sim6_full_parallel_output_table.csv")
+
+head(sim6)
+```
+
+
+# Stratify by covariance structure
+```{r}
+Unst <- sim6[sim6$covariance_structures == 'Unstructured',]
+AR1 <- sim6[sim6$covariance_structures == 'AR(1)']
+AR2 <- sim6[sim6$covariance_structures == 'AR(2)']
+Toe <- sim6[sim6$covariance_structures == 'Toeplitz']
+```
+
+# Power across the sample sizes for each number of columns under effect
+```{r}
+unique(sim6$cols_under_effect)
+```
+# Unstructured covariance matrix
+```{r}
+plot1 <- ggplot(Unst, aes(x = sample_sizes, y = power_global, group = cols_under_effect, color = factor(cols_under_effect))) +
+  geom_line() +
+  labs(title = "Power of the global test across sample sizes for different numbers of columns under effect (Unstructured covariance matrix)",
+       x = "Sample size",
+       y = "Power",
+       color = "Number of columns under effect") +
+  theme(plot.title = element_text(size = 8))
+
+plot2 <- ggplot(Unst, aes(x = sample_sizes, y = power_max, group = cols_under_effect, color = factor(cols_under_effect))) +
+  geom_line() +
+  labs(title = "Power of the maximum test across sample sizes for different numbers of columns under effect (Unstructured covariance matrix)",
+       x = "Sample size",
+       y = "Power",
+       color = "Number of columns under effect") +
+  theme(plot.title = element_text(size = 8))
+
+combined_plot <- ggarrange(plot1, plot2, ncol = 1, nrow = 2)
+annotate_figure(combined_plot,
+                top = text_grob("", 
+                                color = "black", face = "bold", size = 14))
+```
+# JUST REPEAT THE SAME FOR THE OTHER COVARIANCE STRUCTURES
