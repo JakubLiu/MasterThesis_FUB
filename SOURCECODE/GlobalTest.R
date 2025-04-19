@@ -1,22 +1,18 @@
 GlobalTest_AOV <- function(data){
   
   library(MASS)
+  data <- as.matrix(data)
   n <- nrow(data)
   d <- ncol(data)
   X <- data
   
   
-  # calculate contrast matrix__________________________________________________________________________
-  #if covariance_structure == 'unstructured'
-  Id <- matrix(rep(0,d*d), nrow = d, ncol = d)
+  # calculate contrast matrix (comparisons to the grand mean contrast matrix: https://pubmed.ncbi.nlm.nih.gov/23902695/)
+  Id <- matrix(0, nrow = d, ncol = d)
   diag(Id) <- 1
-  Jd <- matrix(rep(1,d*d), nrow = d, ncol = d)
+  Jd <- matrix(1, nrow = d, ncol = d)
   Pd <- Id - (1/d)*Jd
-  H <- Pd
-  
-  T_mat <- t(H)%*%ginv(H%*%t(H))%*%H
-  
-  Y <- T_mat%*%t(X)
+  Y <- Pd%*%t(X)
   
   # calculate the estimator of the empirical covariance matrix__________________________________
   suma <- matrix(rep(0,d*d), nrow = d, ncol = d)
@@ -49,8 +45,9 @@ GlobalTest_AOV <- function(data){
   
   # calculate Qn, An & the degrees of freedom________________________________________________________
   Qn <- sum(A)/n
-  An <- Qn/B0
-  DegFree <- B1/B2
+  
+  DegFree <- B1/B2 * n/(n-1)
+  An <- Qn/B0*DegFree
   
   # calculate the pvalue_____________________________________________________________________________
   pval <- pchisq(An, DegFree, lower.tail = FALSE, log.p = FALSE)
