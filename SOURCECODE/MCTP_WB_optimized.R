@@ -46,7 +46,8 @@ MaxTest_optim <- function(data, mu0){
 }
 
 
-WildBoot <- function(l){  # l reffers to one column in the data
+WildBoot <- function(l, mu0){  # l reffers to one column in the data
+  n <- length(l)
   W <- sample(c(-1,1), n, replace = TRUE) # generate random signs
   l <- W * l  # multiply the data by the random signs
   T_l <- TTest_OneSample(data = l, mu0 = mu0)  # perform a one sample t-test
@@ -79,8 +80,8 @@ MaxTest_small_samples_optim <- function(data, mu0, n_iter){
   Z <- apply(data,2,function(x) x - mean(x))
   
   # here the iterations start (perform a maximum test n_iter times to approximate the distribution of the maximum statistic)
-  T0_max_array <- foreach(itr = 1:n_iter, .packages = "MASS", .combine = rbind) %dopar%{
-    T0_array <- apply(Z, MARGIN = 2, WildBoot) #  loop over the columns/features/repeated measures (each iteration is a standalone maximum test)
+  T0_max_array <- foreach(itr = 1:n_iter, .packages = "MASS", .combine = rbind, .export = c("WildBoot", "n", "TTest_OneSample", "mu0")) %dopar%{
+    T0_array <- apply(Z, MARGIN = 2, FUN = WildBoot, mu0 = mu0) #  loop over the columns/features/repeated measures (each iteration is a standalone maximum test)
     T0_max <- max(T0_array) # calculate the maximum T value for this iteration
     c(T0_max)
   }
