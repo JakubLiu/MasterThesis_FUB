@@ -137,7 +137,7 @@ simulation_table <- foreach(condition = 1:nrow(param_grid), .combine = rbind, .p
 write.csv(simulation_table, output_file_path)
 
 sink("log_file_path")
-B <- BradleyLimal(alpha = fixed_alpha, n_simul = n_simul)
+B <- BradleyLim(alpha = fixed_alpha, n_simul = n_simul)
 out <- paste0("Bradley limits: ", B[1], " ", B[2])
 print(out)
 sink()
