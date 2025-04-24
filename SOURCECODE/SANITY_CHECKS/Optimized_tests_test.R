@@ -45,3 +45,5 @@ results <- data.frame(results)
 # test if the pvalues from the tests and their optimized version are significantly different or not
 t.test(results$MCTP, results$MCTP_opt)
 t.test(results$MCTP2, results$MCTP2_opt)
+
+write.csv(results, 'C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/MasterThesis_FUB/SOURCECODE/Empirical_results_of_comp_optimized_vs_naive_tests.csv')
