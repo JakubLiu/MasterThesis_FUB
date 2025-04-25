@@ -114,8 +114,8 @@ simulation_table <- foreach(condition = 1:nrow(param_grid), .combine = rbind, .p
       max_test_pvalue <- MaxTest_small_samples_optim(data,mu0=fixed_mean0,n_iter=fixed_n_iter_maxtest)
       
       
-      c(global_reject = as.integer(global_test_pvalue <= alpha),
-        max_reject = as.integer(max_test_pvalue <= alpha))
+      c(global_reject = as.integer(global_test_pvalue <= fixed_alpha),
+        max_reject = as.integer(max_test_pvalue <= fixed_alpha))
       
     }
     
@@ -136,7 +136,7 @@ simulation_table <- foreach(condition = 1:nrow(param_grid), .combine = rbind, .p
 
 write.csv(simulation_table, output_file_path)
 
-sink("log_file_path")
+sink(log_file_path)
 B <- BradleyLim(alpha = fixed_alpha, n_simul = n_simul)
 out <- paste0("Bradley limits: ", B[1], " ", B[2])
 print(out)
