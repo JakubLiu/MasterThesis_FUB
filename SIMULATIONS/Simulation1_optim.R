@@ -21,8 +21,8 @@ source("/data/cephfs-1/home/users/jali13_c/MASTER_THESIS/SOURCECODE/BradleyLimit
 
 
 # Define paths to output and log files___________________________________________________________________________________________
-output_file_path <- "/data/cephfs-1/home/users/jali13_c/MASTER_THESIS/SIMULATIONS/Simulation1_optim_results.csv"
-log_file_path <- "/data/cephfs-1/home/users/jali13_c/MASTER_THESIS/SIMULATIONS/Simulation1_optim.log"
+output_file_path <- "/data/cephfs-1/home/users/jali13_c/MASTER_THESIS/SIMULATIONS/Simulation1_results.csv"
+log_file_path <- "/data/cephfs-1/home/users/jali13_c/MASTER_THESIS/SIMULATIONS/Simulation1.log"
 
 
 # variables______________________________________________________________________
@@ -41,12 +41,12 @@ fixed_correlation <- 0.5
 fixed_variance <- 8
 fixed_mean0 <- 0
 fixed_mean0_location <- 1
-fixed_n_iter_maxtest <- 10000
+fixed_n_iter_maxtest <- 1000
 fixed_alpha <- 0.05
 # alternative_pattern not relevant for this simulation
 
 n_conditions <- length(covariance_structures) * length(effect_sizes) * length(sample_sizes)  # number of condition combinations
-n_simul <- 10000  # number of times the data is simulated under the given conditions
+n_simul <- 1000  # number of times the data is simulated under the given conditions
 
 
 # make a parameter grid based on the variables
@@ -58,7 +58,12 @@ colnames(param_grid) <- c('sample_sizes', 'effect_sizes', 'covariance_structures
 
 
 # outer loop over the different simulation parameter values
-simulation_table <- foreach(condition = 1:nrow(param_grid), .combine = rbind, .packages = c("MASS", "matrixcalc", "foreach", "doParallel")) %dopar% {
+#simulation_table <- foreach(condition = 1:nrow(param_grid), .combine = rbind, .packages = c("MASS", "matrixcalc", "foreach", "doParallel")) %dopar% {
+
+simulation_table <- data.frame(matrix(NA, nrow = 1, ncol = 5))
+colnames(simulation_table) <- c('covariance_structures', 'effect_sizes', 'sample_sizes', 'power_global', 'power_max')
+
+for(condition in 1:nrow(param_grid)){
   
   # log the progress (only of the outer loop)
   status <- paste0(round(condition/n_conditions*100,3), "%\n")
@@ -122,18 +127,20 @@ simulation_table <- foreach(condition = 1:nrow(param_grid), .combine = rbind, .p
     power.global <- sum(results[, 1])/n_simul
     power.max <- sum(results[, 2])/n_simul
     
-    return(data.frame(
-      covariance_structures = covariance_structure_,
-      effect_sizes = effect_size_,
-      sample_sizes = sample_size_,
-      power_global = power.global,
-      power_max = power.max
-    ))
+    results_per_condition <- data.frame(
+        covariance_structures = covariance_structure_,
+        effect_sizes = effect_size_,
+        sample_sizes = sample_size_,
+        power_global = power.global,
+        power_max = power.max
+        )
   }
+  
+  simulation_table <- data.frame(rbind(simulation_table, results_per_condition))
   
 }
 
-
+simulation_table <- na.omit(simulation_table)
 write.csv(simulation_table, output_file_path)
 
 sink(log_file_path)

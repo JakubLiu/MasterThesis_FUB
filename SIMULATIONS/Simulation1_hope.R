@@ -2,7 +2,7 @@ library(foreach)
 library(doParallel)
 
 # make cluster for parallel computing
-num_cores <- 80
+num_cores <- 10
 cl <- makeCluster(num_cores)
 registerDoParallel(cl)
 
@@ -41,12 +41,12 @@ fixed_correlation <- 0.5
 fixed_variance <- 8
 fixed_mean0 <- 0
 fixed_mean0_location <- 1
-fixed_n_iter_maxtest <- 1000
+fixed_n_iter_maxtest <- 100
 fixed_alpha <- 0.05
 # alternative_pattern not relevant for this simulation
 
 n_conditions <- length(covariance_structures) * length(effect_sizes) * length(sample_sizes)  # number of condition combinations
-n_simul <- 1000  # number of times the data is simulated under the given conditions
+n_simul <- 100  # number of times the data is simulated under the given conditions
 
 
 # make a parameter grid based on the variables
@@ -61,7 +61,6 @@ colnames(param_grid) <- c('sample_sizes', 'effect_sizes', 'covariance_structures
 #simulation_table <- foreach(condition = 1:nrow(param_grid), .combine = rbind, .packages = c("MASS", "matrixcalc", "foreach", "doParallel")) %dopar% {
 
 simulation_table <- data.frame(matrix(NA, nrow = 1, ncol = 5))
-colnames(simulation_table) <- c('covariance_structures', 'effect_sizes', 'sample_sizes', 'power_global', 'power_max')
 
 for(condition in 1:nrow(param_grid)){
   
@@ -140,7 +139,7 @@ for(condition in 1:nrow(param_grid)){
   
 }
 
-simulation_table <- na.omit(simulation_table)
+
 write.csv(simulation_table, output_file_path)
 
 sink(log_file_path)
