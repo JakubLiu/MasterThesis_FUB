@@ -1,0 +1,112 @@
+---
+title: "large_sim1_results"
+author: "Jakub Liu"
+date: "2025-05-04"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# This is not an exhaustive visualization, just some preliminary visual inspection.
+## Simulation parameters
+### Variables
+  - covariance structure
+  - effect size (in the means)
+  - sample size
+### Simulation numbers
+  - for each of the combinations of the variables the data was simulated 10,000 times
+  - per simulation there where 10,000 Wild Bootstrap iterations as part of the maximum test
+### Bradley Limits:
+  - BL = 0.0457
+  - BU = 0.0543
+  - accuracy = 0.86%
+
+
+```{r}
+library(data.table)
+
+data <- fread("C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/MasterThesis_FUB/SIMULATIONS/SIMULATION_RESULTS/LARGE_SIMULATIONS/Simulation1_results.csv")
+data$V1 <- NULL
+Unst <- data[data$covariance_structures == 'Unstructured',]
+AR1 <- data[data$covariance_structures == 'AR(1)',]
+AR2 <- data[data$covariance_structures == 'AR(2)',]
+Toeplitz <- data[data$covariance_structures == 'Toeplitz',]
+```
+
+```{r}
+plot(Unst[Unst$effect_sizes == 2,]$sample_sizes, Unst[Unst$effect_sizes == 2, ]$power_global, col = 'blue', type = 'l', lwd = 4, xlab = 'sample size', ylab = 'power', main = 'Unstructured covariance matrix with an effect size of 2 (in the means)',
+     cex.main = 1)
+lines(Unst[Unst$effect_sizes == 2,]$sample_sizes, Unst[Unst$effect_sizes == 2, ]$power_max, col = 'red', type = 'l', lwd = 4)
+grid()
+legend("bottomright",                      
+       legend = c('global test', 'MCTP + WildBoot'),
+       col = c("blue", "red"),           
+       lty = 1,                         
+       lwd = 2)  
+```
+
+
+
+
+
+```{r}
+plot(AR1[AR1$effect_sizes == 2,]$sample_sizes, AR1[AR1$effect_sizes == 2, ]$power_global, col = 'blue', type = 'l', lwd = 4, xlab = 'sample size', ylab = 'power', main = 'AR(1) covariance matrix with an effect size of 2 (in the means)',
+     cex.main = 1)
+lines(AR1[AR1$effect_sizes == 2,]$sample_sizes, AR1[AR1$effect_sizes == 2, ]$power_max, col = 'red', type = 'l', lwd = 4)
+grid()
+legend("bottomright",                      
+       legend = c('global test', 'MCTP + WildBoot'),
+       col = c("blue", "red"),           
+       lty = 1,                         
+       lwd = 2)   
+```
+```{r}
+plot(AR2[AR2$effect_sizes == 2,]$sample_sizes, AR2[AR2$effect_sizes == 2, ]$power_global, col = 'blue', type = 'l', lwd = 4, xlab = 'sample size', ylab = 'power', main = 'AR(2) covariance matrix with an effect size of 2 (in the means)',
+     cex.main = 1)
+lines(AR2[AR2$effect_sizes == 2,]$sample_sizes, AR2[AR2$effect_sizes == 2, ]$power_max, col = 'red', type = 'l', lwd = 4)
+grid()
+legend("bottomright",                      
+       legend = c('global test', 'MCTP + WildBoot'),
+       col = c("blue", "red"),           
+       lty = 1,                         
+       lwd = 2)  
+```
+```{r}
+plot(Toeplitz[Toeplitz$effect_sizes == 2,]$sample_sizes, Toeplitz[Toeplitz$effect_sizes == 2, ]$power_global, col = 'blue', type = 'l', lwd = 4, xlab = 'sample size', ylab = 'power', main = 'Toeplitz covariance matrix with an effect size of 2 (in the means)',
+     cex.main = 1)
+lines(Toeplitz[Toeplitz$effect_sizes == 2,]$sample_sizes, Toeplitz[Toeplitz$effect_sizes == 2, ]$power_max, col = 'red', type = 'l', lwd = 4)
+grid()
+legend("bottomright",                      
+       legend = c('global test', 'MCTP + WildBoot'),
+       col = c("blue", "red"),           
+       lty = 1,                         
+       lwd = 2)  
+```
+
+```{r}
+plot(AR1[AR1$effect_sizes == 1,]$sample_sizes, AR1[AR1$effect_sizes == 1, ]$power_max, col = 'yellow', type = 'l', lwd = 4, xlab = 'sample size', ylab = 'power', main = 'Power of the maximum test across the effect sizes (in the means), AR(1) covariance matrix',
+     cex.main = 0.8, ylim = c(0,1))
+lines(AR1[AR1$effect_sizes == 1,]$sample_sizes, AR1[AR1$effect_sizes == 2, ]$power_max, col = 'orange', type = 'l', lwd = 4)
+lines(AR1[AR1$effect_sizes == 1,]$sample_sizes, AR1[AR1$effect_sizes == 3, ]$power_max, col = 'red', type = 'l', lwd = 4)
+grid()
+legend("bottomright",
+       legend = c('effect size 1', 'effect size 2', 'effect size 3'),
+       col = c("yellow", "orange", "red"),
+       lty = 1,
+       lwd = 2)
+```
+```{r}
+plot(AR1[AR1$effect_sizes == 1,]$sample_sizes, AR1[AR1$effect_sizes == 1, ]$power_global, col = 'yellow', type = 'l', lwd = 4, xlab = 'sample size', ylab = 'power', main = 'Power of the global test across the effect sizes (in the means), AR(1) covariance matrix',
+     cex.main = 0.8, ylim = c(0,1))
+lines(AR1[AR1$effect_sizes == 1,]$sample_sizes, AR1[AR1$effect_sizes == 2, ]$power_global, col = 'orange', type = 'l', lwd = 4)
+lines(AR1[AR1$effect_sizes == 1,]$sample_sizes, AR1[AR1$effect_sizes == 3, ]$power_global, col = 'red', type = 'l', lwd = 4)
+grid()
+legend("bottomright",
+       legend = c('effect size 1', 'effect size 2', 'effect size 3'),
+       col = c("yellow", "orange", "red"),
+       lty = 1,
+       lwd = 2)
+```
+
