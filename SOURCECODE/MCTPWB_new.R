@@ -11,7 +11,7 @@ TTest_OneSample <- function(data, mu0){
 
 
 # function for max test without the wild bootstrap approximation
-MaxTest <- function(data, mu0){
+MaxTest_new <- function(data, mu0){
   # ============================================================
   # WHAT IS DONE HERE:
   #   - applying the contrast matrix
@@ -25,7 +25,7 @@ MaxTest <- function(data, mu0){
   # the repeated measures/features must be the columns
   n <- nrow(data)
   d <- ncol(data)
-
+  
   # create the contrat matrix
   # this is a comparison to the grand mean contrast matrix (see: https://www.degruyterbrill.com/document/doi/10.1515/ijb-2012-0020/html)
   Id <- matrix(0, nrow = d, ncol = d)
@@ -35,9 +35,8 @@ MaxTest <- function(data, mu0){
   Y <- matrix(0, nrow = n, ncol = d)
   
   # center the data using the contrast matrix
-  Y <- Pd%*%t(data)
-  Y <- t(Y)   # IS THIS OKAY TO JUST TRANSPOSE IT? IF I DON'T TRANSPOSE IT I GET A DIMENSIONS ERROR
-
+  Y <- data%*%Pd
+  
   T0_array <- 1:d  # array to hold the T statistics for all features/columns/repeated measures
   
   # loop over the columns/features/repeated measures
@@ -61,7 +60,7 @@ WildBoot <- function(l){  # l reffers to one column in the data
 
 
 # function for the max test with the wild bootstrap approximation
-MaxTest_small_samples <- function(data, mu0, n_iter){
+MaxTest_small_samples_new <- function(data, mu0, n_iter){
   # =====================================================================================
   # WHAT IS DONE HERE:
   #   - centering (in the sense of Z)
@@ -76,7 +75,7 @@ MaxTest_small_samples <- function(data, mu0, n_iter){
   # the repeated measures/features must be the columns
   n <- nrow(data)
   d <- ncol(data)
-
+  
   # create the contrat matrix
   # this is a comparison to the grand mean contrast matrix (see: https://www.degruyterbrill.com/document/doi/10.1515/ijb-2012-0020/html)
   Id <- matrix(0, nrow = d, ncol = d)
@@ -87,14 +86,11 @@ MaxTest_small_samples <- function(data, mu0, n_iter){
   
   
   # center the data using the contrast matrix
-  Y <- Pd%*%t(data)
-  Y <- t(Y)   # IS THIS OKAY TO JUST TRANSPOSE IT? IF I DON'T TRANSPOSE IT I GET A DIMENSIONS ERROR
+  Y <- data%*%Pd
   
   # center the variables, i.e. from each column remove the mean of that column
-  Z <- apply(Y,2,function(x) x - mean(x))  # OLD
-  #Z <- apply(Y,1,function(x) x - mean(x))  # NEW
+  Z <- apply(Y,2,function(x) x - mean(x))
   
-  #T0_max_array <- 1:n_iter # array to hold the maximum T values
   T0_max_array <- vector(length = n_iter) # array to hold the maximum T values
   
   # here the iterations start (perform a maximum test n_iter times to approximate the distribution of the maximum statistic)
@@ -117,7 +113,7 @@ MaxTest_small_samples <- function(data, mu0, n_iter){
   
   
   # calculate the pvalue
-  T0_max_final <- MaxTest(data = data, mu0 = mu0)  # perform MCTP one last time to ...
+  T0_max_final <- MaxTest_new(data = data, mu0 = mu0)  # perform MCTP one last time to ...
   T0_max_final <- abs(T0_max_final)
   T0_max_array <- abs(T0_max_array)
   # ... compare its test statistic to our empirical distribution
@@ -126,3 +122,13 @@ MaxTest_small_samples <- function(data, mu0, n_iter){
   
 }
 
+
+
+n <- 10
+d <- 18
+data <- matrix(rnorm(n*d, 0, 1), nrow = n, ncol = d)
+
+
+MaxTest_small_samples(data = data, mu0 = 0, n_iter = 100)
+
+#MaxTest(data,0)

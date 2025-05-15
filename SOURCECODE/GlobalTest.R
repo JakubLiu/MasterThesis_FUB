@@ -8,11 +8,14 @@ GlobalTest_AOV <- function(data){
   
   
   # calculate contrast matrix (comparisons to the grand mean contrast matrix: https://pubmed.ncbi.nlm.nih.gov/23902695/)
+  
   Id <- matrix(0, nrow = d, ncol = d)
   diag(Id) <- 1
   Jd <- matrix(1, nrow = d, ncol = d)
   Pd <- Id - (1/d)*Jd
+  
   Y <- Pd%*%t(X)
+  
   
   # calculate the estimator of the empirical covariance matrix__________________________________
   suma <- matrix(rep(0,d*d), nrow = d, ncol = d)

@@ -41,12 +41,12 @@ fixed_correlation <- 0.5
 fixed_variance <- 8
 fixed_mean0 <- 0
 fixed_mean0_location <- 1
-fixed_n_iter_maxtest <- 1000
+fixed_n_iter_maxtest <- 10000
 fixed_alpha <- 0.05
 # alternative_pattern not relevant for this simulation
 
 n_conditions <- length(covariance_structures) * length(effect_sizes) * length(sample_sizes)  # number of condition combinations
-n_simul <- 1000  # number of times the data is simulated under the given conditions
+n_simul <- 10000  # number of times the data is simulated under the given conditions
 
 
 # make a parameter grid based on the variables
