@@ -1,10 +1,3 @@
-# Maybe this simulation does not really make sense,
-# since when the means linearly increase along the dimensions
-# then adding more dimensions will lead to more effect and
-# because of that distort our findings?
-
-
-
 source('C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/MasterThesis_FUB/SOURCECODE/MCTP_WB_fast.R')  # MCTPWB
 source('C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/MasterThesis_FUB/SOURCECODE/GlobalTest.R')  # Global Test
 
@@ -12,16 +5,16 @@ source('C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/Mas
 
 # constants_____________________________________________________________________________
 const_variance <- 1
-const_effectsize <- 0.03
+const_dimensionality <- 18
 const_samplesize <- 10
 const_mu0 <- 0
 const_alpha <- 0.05
-const_nsim <- 100
+const_nsim <- 10000
 const_nboot <- 10000
 
 
 # variables___________________________________________________________________________
-var_dimensionality <- seq(from = 10, to = 100, by = 5)
+var_effectsize <- seq(from = 0.01, to = 0.2, by = 0.01)
 
 
 
@@ -42,22 +35,22 @@ num_cores <- 12
 cl <- makeCluster(num_cores)
 registerDoParallel(cl)
 
-powers_glob <- vector(length = length(var_dimensionality))
-powers_MCTP <- vector(length = length(var_dimensionality))
+powers_glob <- vector(length = length(var_effectsize))
+powers_MCTP <- vector(length = length(var_effectsize))
 
-for(i in 1:length(var_dimensionality)){
+for(i in 1:length(var_effectsize)){
   
-  status <- paste0(i/length(var_dimensionality)*100, '%')
+  status <- paste0(i/length(var_effectsize)*100, '%')
   print(status)
-  d <- var_dimensionality[i]
+  effect <- var_effectsize[i]
   
   pvalues <- foreach(i=1:const_nsim, .packages = c("MASS", "resample"), .combine = rbind) %dopar%{
     
     
     k <- 0
-    means <- vector(length = d)
-    for(j in 1:d){
-      means[j] <- const_mu0 + const_effectsize*k
+    means <- vector(length = const_dimensionality)
+    for(j in 1:const_dimensionality){
+      means[j] <- const_mu0 + effect*k
       k <- k + 1
     }
     
@@ -72,7 +65,7 @@ for(i in 1:length(var_dimensionality)){
 }
 
 
-sim_tab <- data.frame(cbind(var_dimensionality,
+sim_tab <- data.frame(cbind(var_effectsize,
                             powers_glob,
                             powers_MCTP))
 
@@ -82,10 +75,9 @@ stopCluster(cl)
 
 write.csv(sim_tab, output_file_path)
 
-
-plot(sim_tab$var_dimensionality, sim_tab$powers_MCTP, col = 'red', type = 'l', lwd = 4, ylim = c(0,1),
+plot(sim_tab$var_effectsize, sim_tab$powers_MCTP, col = 'red', type = 'l', lwd = 4, ylim = c(0,1),
      label = 'MCTPWB', xlab = 'sample size', ylab = 'power')
-lines(sim_tab$var_dimensionality, sim_tab$powers_glob, col = 'blue', type = 'l', lwd = 4, label = 'Global Test')
+lines(sim_tab$var_effectsize, sim_tab$powers_glob, col = 'blue', type = 'l', lwd = 4, label = 'Global Test')
 grid()
 
 legend("bottomright",
