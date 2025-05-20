@@ -1,7 +1,5 @@
 #!/usr/bin/Rscript
 
-source('/media/DANE/home/jliu/MASTER_THESIS_BER/SOURCECODE/MCTP_WB_fast.R')  # MCTPWB
-source('/media/DANE/home/jliu/MASTER_THESIS_BER/SOURCECODE/GlobalTest.R')  # Global Test
 
 
 source('C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/MasterThesis_FUB/SOURCECODE/MCTP_WB_fast.R')  # MCTPWB
