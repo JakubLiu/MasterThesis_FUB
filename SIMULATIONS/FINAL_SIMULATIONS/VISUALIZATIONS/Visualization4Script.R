@@ -7,7 +7,7 @@ library(data.table)
 
 
 # visualization simulation 1 _______________________________________________________________________________
-data <- fread('C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/MasterThesis_FUB/SIMULATIONS/FINAL_SIMULATIONS/FinalSim4_modified.results.csv')
+data <- fread('C:/Users/Qba Liu/Documents/STUDIA/BIOINF_MASTER_BERLIN/MASTER_THESIS/MasterThesis_FUB/SIMULATIONS/FINAL_SIMULATIONS/FinalSim4_modified.v2.results.csv')
 AR1 <- data[data$var_covariance_structures == 'AR(1)',]
 AR2 <- data[data$var_covariance_structures == 'AR(2)',]
 Toeplitz <- data[data$var_covariance_structures == 'Toeplitz',]
