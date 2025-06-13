@@ -1,0 +1,25 @@
+MAKE THE STUFF CHRONOLOGICALLY
+
+- make the legend    --> DONE
+
+- od ogółu do szczegółu
+
+- state the general trends for sim1-3
+	- powersL glob > mctp mod > mctp ------------------------> DONE
+	- the tests are more powerfull for the AR2 that AR1 -------------------> DONE
+		- here make a detour about the covariance matrices (lecture notes) and give the formulas in the 		  appendix
+		- say that moreover for the AR2 the modified MCTP is almost as powerfull as the global
+	- in Toe the test are more powerfull than AR1 but not as powerfull as AR2
+	- add a plot of the same dim and the three cov structures ------------------> DONE
+	- the power increases with dimensionality (say why this is intuitive)
+	- add a plot with the same covstruct but different dimensionalities
+
+- sim 4
+	- the opposite powers
+	- no effect of dimensionality
+	- the powers for the covariance matrices is the same as in sim1-3 (AR2 > Toe > AR1)
+	- add an example plot
+
+
+
+NEXT STEP: make a detour about the covariance matirces in the appendix (only the formulas, the description of the phenomenon will be in the conclusions)
